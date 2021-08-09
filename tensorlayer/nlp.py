@@ -368,7 +368,7 @@ def create_vocab(sentences, word_counts_output_file, min_word_count=1):
     print("    Words in vocabulary: %d" % len(word_counts))
 
     # Write out the word counts file.
-    with tf.compat.v1.gfile.FastGFile(word_counts_output_file, "w") as f:
+    with tf.gfile.FastGFile(word_counts_output_file, "w") as f:
         f.write("\n".join(["%s %d" % (w, c) for w, c in word_counts]))
     print("    Wrote vocabulary file: %s" % word_counts_output_file)
 

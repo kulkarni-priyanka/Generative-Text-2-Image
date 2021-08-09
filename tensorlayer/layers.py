@@ -830,7 +830,7 @@ class ReconLayer(DenseLayer):
         else:
             raise Exception("Don't support the given reconstruct activation function")
 
-        self.train_op = tf.train.AdamOptimizer(learning_rate, beta1=0.9, beta2=0.999,
+        self.train_op = tf.train.AdamOptimizer(learning_rate, beta1=0.5, beta2=0.999,
                                         epsilon=1e-08, use_locking=False).minimize(self.cost, var_list=self.train_params)
                 # self.train_op = tf.train.GradientDescentOptimizer(1.0).minimize(self.cost, var_list=self.train_params)
 

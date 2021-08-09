@@ -2,9 +2,9 @@
 # -*- coding: utf8 -*-
 
 """ GAN-CLS """
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 import tensorlayer as tl
-from tensorlayer.layers import *
+
 from tensorlayer.prepro import *
 from tensorlayer.cost import *
 import numpy as np
@@ -19,23 +19,36 @@ import model
 
 tf.disable_eager_execution()
 ###======================== PREPARE DATA ====================================###
+dir =r"D:\My_Stuff\JHU_Stuff\625.742\text-to-image-master\Generative-Text-2-Image\\"
+###======================== PREPARE DATA ====================================###
 print("Loading data from pickle ...")
+
 import pickle
-with open("_vocab.pickle", 'rb') as f:
+
+with open(dir+"_vocab.pickle", 'rb') as f:
     vocab = pickle.load(f)
-with open("_image_train.pickle", 'rb') as f:
-    _, images_train = pickle.load(f)
-with open("_image_test.pickle", 'rb') as f:
-    _, images_test = pickle.load(f)
-with open("_n.pickle", 'rb') as f:
+
+with open(dir+"_image_train.pickle", 'rb') as f:
+    images_train = pickle.load(f)
+
+with open(dir+"_image_test.pickle", 'rb') as f:
+    images_test = pickle.load(f)
+
+with open(dir+"_n.pickle", 'rb') as f:
     n_captions_train, n_captions_test, n_captions_per_image, n_images_train, n_images_test = pickle.load(f)
-with open("_caption.pickle", 'rb') as f:
+
+with open(dir+ "_caption.pickle", 'rb') as f:
     captions_ids_train, captions_ids_test = pickle.load(f)
+
+
+
+
+
 # images_train_256 = np.array(images_train_256)
 # images_test_256 = np.array(images_test_256)
-images_train = np.array(images_train)
-images_test = np.array(images_test)
 
+images_test = np.array(images_test)
+images_train = np.array(images_train)
 # print(n_captions_train, n_captions_test)
 # exit()
 
@@ -141,14 +154,95 @@ def main_train():
     sample_seed = np.random.normal(loc=0.0, scale=1.0, size=(sample_size, z_dim)).astype(np.float32)
         # sample_seed = np.random.uniform(low=-1, high=1, size=(sample_size, z_dim)).astype(np.float32)]
     n = int(sample_size / ni)
+
+
+
+    sample_sentence = ["a public transit bus on an open field."] * n + \
+                      ["A bus."] * n + \
+                      ["A guy walks a dog near some buses."] * n + \
+                      ["The orange bus is travelling down the road."] * n + \
+                      ["A city bus driving into a bus terminal. "] * n + \
+                      ["A bus parked next to a but stop loading area."] * n + \
+                      ["A red double decker bus."] * n + \
+                      ["A large red bus."] * n
+
+
+    '''
+    
+    sample_sentence = ["A man walking a dog."] * n + \
+                      ["Two dogs."] * n + \
+                      ["A small black dog."] * n + \
+                      ["A dog playing with frisbee."] * n + \
+                      ["A dog sitting. "] * n + \
+                      ["A woman and dog."] * n + \
+                      ["Brown dog sitting."] * n + \
+                      ["A dog laying on the grass."] * n
+    
+    sample_sentence = ["a public transit bus on an open field."] * n + \
+                      ["A bus."] * n + \
+                      ["A guy walks a dog near some buses."] * n + \
+                      ["The orange bus is travelling down the road."] * n + \
+                      ["A city bus driving into a bus terminal. "] * n + \
+                      ["A bus parked next to a but stop loading area."] * n + \
+                      ["A red double decker bus."] * n + \
+                      ["A large red bus."] * n
+    
+    sample_sentence = ["Some old trains sitting in a train yard."] * n + \
+                      ["A train."] * n + \
+                      ["A woman is walking near trains on tracks."] * n + \
+                      ["a train that is on a long train track."] * n + \
+                      ["A red train is going through a forest. "] * n + \
+                      ["A train traveling down a road in the snow."] * n + \
+                      ["A train at the station."] * n + \
+                      ["A large train."] * n
+    
+    sample_sentence = ["A white airplane in a field."] * n + \
+                      ["A big model of a plane and a train on display."] * n + \
+                      ["A large airplane is flying through the sky."] * n + \
+                      ["An airplane on a runway by a body of water."] * n + \
+                      ["A plane flying high up in the sky. "] * n + \
+                      ["A person that is looking at an airplane."] * n + \
+                      ["A large plane sitting inside of a hangar."] * n + \
+                      ["A small white airplane is parked on the cement."] * n
+    
+    sample_sentence = ["Some old trains sitting in a train yard."] * n + \
+                      ["A train."] * n + \
+                      ["A woman is walking near trains on tracks."] * n + \
+                      ["a train that is on a long train track."] * n + \
+                      ["A red train is going through a dense forest. "] * n + \
+                      ["A train traveling down a road in the snow."] * n + \
+                      ["A train at the station."] * n +\
+                      ["A large train on a track."] * n
+    
+   
+    sample_sentence = ["A man walking a dog."] * n + \
+                      ["Two dogs."] * n + \
+                      ["A small black dog."] * n + \
+                      ["A dog playing with frisbee."] * n + \
+                      ["A dog sitting. "] * n + \
+                      ["A woman and dog."] * n + \
+                      ["Brown dog sitting."] * n +\
+                      ["A dog laying on the grass."] * n
+                      
+    sample_sentence = ["People sitting around a campfire roasting hot dogs."] * n + \
+                      ["An Asian woman eating by a large window."] * n + \
+                      ["A little girl holding a hot dog and a drink."] * n + \
+                      ["A sandwich with a pickle in a container."] * n + \
+                      ["The lunch looks amazing and very colorful"] * n + \
+                      ["Two young women are eating hot dogs while walking down the sidewalk."] * n + \
+                      ["A close up of a person holding an almost empty glass of wine."] * n +\
+                      ["Tray of food disguised in car, on top of a restaurant counter "] * n
+                      
     sample_sentence = ["the flower shown has yellow anther red pistil and bright red petals."] * n + \
                       ["this flower has petals that are yellow, white and purple and has dark lines"] * n + \
                       ["the petals on this flower are white with a yellow center"] * n + \
                       ["this flower has a lot of small round pink petals."] * n + \
                       ["this flower is orange in color, and has petals that are ruffled and rounded."] * n + \
                       ["the flower has yellow petals and the center of it is brown."] * n + \
-                      ["this flower has petals that are blue and white."] * n +\
+                      ["this flower has petals that are blue and white."] * n + \
                       ["these white flowers have petals that start off white in color and end in a white towards the tips."] * n
+    '''
+
 
     # sample_sentence = captions_ids_test[0:sample_size]
     for i, sentence in enumerate(sample_sentence):
@@ -159,7 +253,7 @@ def main_train():
         # print(sample_sentence[i])
     sample_sentence = tl.prepro.pad_sequences(sample_sentence, padding='post')
 
-    n_epoch = 100 # 600
+    n_epoch = 600 # 600
     print_freq = 1
     n_batch_epoch = int(n_images_train / batch_size)
     # exit()
@@ -219,12 +313,12 @@ def main_train():
             errG, _ = sess.run([g_loss, g_optim], feed_dict={
                             t_real_caption : b_real_caption,
                             t_z : b_z})
-
-            print("Epoch: [%2d/%2d] [%4d/%4d] time: %4.4fs, d_loss: %.8f, g_loss: %.8f, rnn_loss: %.8f" \
-                        % (epoch, n_epoch, step, n_batch_epoch, time.time() - step_time, errD, errG, errRNN))
+            if step == (n_batch_epoch-1):
+                print("Epoch: [%2d/%2d] [%4d/%4d] time: %4.4fs, d_loss: %.8f, g_loss: %.8f, rnn_loss: %.8f" \
+                            % (epoch, n_epoch, step, n_batch_epoch, time.time() - step_time, errD, errG, errRNN))
 
         if (epoch + 1) % print_freq == 0:
-            print(" ** Epoch %d took %fs" % (epoch, time.time()-start_time))
+            #print(" ** Epoch %d took %fs" % (epoch, time.time()-start_time))
             img_gen, rnn_out = sess.run([net_g.outputs, net_rnn.outputs], feed_dict={
                                         t_real_caption : sample_sentence,
                                         t_z : sample_seed})

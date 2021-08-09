@@ -792,7 +792,7 @@ def discriminator(x, z, input_txt=None, is_train=True, reuse=False):
 ## for text-to-image mapping ===================================================
 t_dim = 128         # text feature dimension
 rnn_hidden_size = t_dim
-vocab_size = 8000
+vocab_size =  3881
 word_embedding_size = 256
 keep_prob = 1.0
 

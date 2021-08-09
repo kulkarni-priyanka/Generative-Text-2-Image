@@ -552,7 +552,7 @@ def save_npz(save_list=[], name='model.npz', sess=None):
     np.savez(name, params=save_list_var)
     save_list_var = None
     del save_list_var
-    print("[*] %s saved" % name)
+    #print("[*] %s saved" % name)
 
     ## save params into a dictionary
     # rename_dict = {}
@@ -593,7 +593,7 @@ def load_npz(path='', name='model.npz'):
     #     print('Loading %s, %s' % (key, str(val.shape)))
     # return params
     ## if save_npz save params into a list
-    d = np.load( path+name )
+    d = np.load(path+name, allow_pickle=True)
     # for val in sorted( d.items() ):
     #     params = val
     #     return params
