@@ -3,7 +3,7 @@
 
 This is a tensorflow implementation of synthesizing images. The images are synthesized using the GAN-CLS Algorithm from the paper [Generative Adversarial Text-to-Image Synthesis][2]. This implementation is built on top of the excellent [DCGAN in Tensorflow][3].
 
-Plese star https://github.com/tensorlayer/tensorlayer
+Please star https://github.com/tensorlayer/tensorlayer
 
 ![Model architecture](http://i.imgur.com/dNl2HkZ.jpg)
 
